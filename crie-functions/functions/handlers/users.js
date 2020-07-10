@@ -67,6 +67,7 @@ exports.signup = (req, res) => {
                   companyName,
                   role: "",
                   area: "",
+                  id: userId,
                 };
                 // TODO: Cadastrar o usuário no nosso banco de dados
                 return db
@@ -83,7 +84,7 @@ exports.signup = (req, res) => {
                     .status(400)
                     .json({ message: "E-mail já está em uso." });
                 } else if (err.code === "auth/invalid-email") {
-                  return res.status(400).json({ message: "E-mail inválido." });
+                  return res.status(400).json({ message: "E-mail inválid" });
                 } else if (err.code === "auth/weak-password") {
                   return res
                     .status(400)
@@ -102,6 +103,28 @@ exports.signup = (req, res) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+};
 
-  // TODO: Retornar o token
+exports.login = (req, res) => {
+  let email = req.body.email.trim();
+  let password = req.body.password.trim();
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((data) => {
+      return data.user.getIdToken();
+    })
+    .then((token) => {
+      return res.json({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.code === "auth/wrong-password") {
+        return res.status(403).json({ message: "Senha incorreta." });
+      } else if (err.code === "auth/user-not-found") {
+        return res.status(403).json({ message: "Usuário não encontrado." });
+      }
+      return res.status(500).json({ error: err.code });
+    });
 };
