@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
   let token, userId;
 
   // Conferir se o CPF já não está sendo usado no banco de dados
-  db.collectionGroup("users")
+  db.collection("users")
     .where("cpf", "==", cpf)
     .get()
     .then((snapshot) => {
@@ -63,16 +63,15 @@ exports.signup = (req, res) => {
                   name,
                   lastName,
                   cpf,
+                  score: 0,
                   companyId,
                   companyName,
                   role: "",
                   area: "",
                   id: userId,
                 };
-                // TODO: Cadastrar o usuário no nosso banco de dados
-                return db
-                  .doc(`/companies/${companyId}/users/${userId}`)
-                  .set(userCredentials);
+                // Cadastrar o usuário no nosso banco de dados
+                return db.doc(`/users/${userId}`).set(userCredentials);
               })
               .then(() => {
                 return res.status(201).json({ token });
@@ -125,6 +124,28 @@ exports.login = (req, res) => {
       } else if (err.code === "auth/user-not-found") {
         return res.status(403).json({ message: "Usuário não encontrado." });
       }
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// const numbers = [1, 2, 3, 4]
+// numbers.forEach((number) => {
+//   console.log(number * 2)
+// })
+
+exports.getUsersList = (req, res) => {
+  let users = [];
+  db.collection(`users`)
+    .orderBy("score", "desc")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        users.push(doc.data());
+      });
+      return res.json({ users });
+    })
+    .catch((err) => {
+      console.error(err);
       return res.status(500).json({ error: err.code });
     });
 };

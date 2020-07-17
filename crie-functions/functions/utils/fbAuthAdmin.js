@@ -2,7 +2,7 @@ const firebase = require("firebase");
 
 const { admin, db } = require("./admin");
 
-const FBAuth = (req, res, next) => {
+const FBAuthAdmin = (req, res, next) => {
   let idToken;
   if (
     req.headers.authorization &&
@@ -29,7 +29,14 @@ const FBAuth = (req, res, next) => {
             req.user.name = doc.data().name;
             req.user.lastName = doc.data().lastName;
             req.user.score = doc.data().score;
+            req.user.role = doc.data().role;
           });
+          if (req.user.role !== "admin") {
+            console.error("Permissão de administrador necessária.");
+            return res.status(403).json({
+              error: "Não autorizado - permissão de administrador necessária",
+            });
+          }
         })
         .then(() => {
           return next();
@@ -45,4 +52,4 @@ const FBAuth = (req, res, next) => {
     });
 };
 
-module.exports = { FBAuth };
+module.exports = { FBAuthAdmin };
