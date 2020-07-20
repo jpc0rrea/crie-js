@@ -15,11 +15,12 @@ const {
   getLastIdeas,
   changeIdeaStatus,
 } = require("./handlers/ideas");
+const { getAreas } = require("./handlers/companies");
 
 const { FBAuth } = require("./utils/fbAuth");
 const { FBAuthAdmin } = require("./utils/fbAuthAdmin");
 
-// user routes
+// users routes
 app.post("/signup", signup);
 app.post("/login", login);
 app.get("/userslist", FBAuth, getUsersList);
@@ -30,5 +31,8 @@ app.post("/newidea", FBAuth, createIdea);
 app.get("/ideaDetails/:ideaId", FBAuth, getIdeaDetail);
 app.get("/allideas", FBAuth, getLastIdeas);
 app.post("/changeIdeaStatus/:ideaId", FBAuthAdmin, changeIdeaStatus);
+
+// companies routes
+app.get("/areas", FBAuth, getAreas);
 
 exports.api = functions.https.onRequest(app);
