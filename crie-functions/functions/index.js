@@ -7,7 +7,12 @@ app.use(cors());
 
 const { db } = require("./utils/admin");
 
-const { signup, login, getUsersList } = require("./handlers/users");
+const {
+  signup,
+  login,
+  getUsersList,
+  changeUserArea,
+} = require("./handlers/users");
 const {
   getIdeas,
   createIdea,
@@ -15,7 +20,7 @@ const {
   getLastIdeas,
   changeIdeaStatus,
 } = require("./handlers/ideas");
-const { getAreas } = require("./handlers/companies");
+const { getAreas, createArea } = require("./handlers/companies");
 
 const { FBAuth } = require("./utils/fbAuth");
 const { FBAuthAdmin } = require("./utils/fbAuthAdmin");
@@ -24,6 +29,7 @@ const { FBAuthAdmin } = require("./utils/fbAuthAdmin");
 app.post("/signup", signup);
 app.post("/login", login);
 app.get("/userslist", FBAuth, getUsersList);
+app.post("/changeuserarea", FBAuthAdmin, changeUserArea);
 
 // ideas routes
 app.get("/ideas", FBAuth, getIdeas);
@@ -34,5 +40,6 @@ app.post("/changeIdeaStatus/:ideaId", FBAuthAdmin, changeIdeaStatus);
 
 // companies routes
 app.get("/areas", FBAuth, getAreas);
+app.post("/newarea", FBAuthAdmin, createArea);
 
 exports.api = functions.https.onRequest(app);

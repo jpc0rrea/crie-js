@@ -149,3 +149,20 @@ exports.getUsersList = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+exports.changeUserArea = (req, res) => {
+  let area = req.body.area.trim();
+  let userId = req.body.userId.trim();
+
+  db.doc(`/users/${userId}`)
+    .update({
+      area,
+    })
+    .then(() => {
+      return res.json({ message: "Setor atualizado com sucesso." });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
