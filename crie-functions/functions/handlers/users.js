@@ -1,6 +1,6 @@
 const firebase = require("firebase");
 
-const { db, admin } = require("../utils/admin.js");
+const { db } = require("../utils/admin.js");
 
 const firebaseConfig = require("../utils/firebaseConfig");
 firebase.initializeApp(firebaseConfig);
@@ -160,6 +160,21 @@ exports.changeUserArea = (req, res) => {
     })
     .then(() => {
       return res.json({ message: "Setor atualizado com sucesso." });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.changeUserRole = (req, res) => {
+  let newRole = req.body.newRole.trim();
+  let userId = req.body.userId.trim();
+
+  db.doc(`/users/${userId}`)
+    .update({ role: newRole })
+    .then(() => {
+      return res.json({ message: "Cargo alterado com sucesso." });
     })
     .catch((err) => {
       console.error(err);

@@ -1,6 +1,4 @@
-const firebase = require("firebase");
-
-const { db, admin } = require("../utils/admin.js");
+const { db } = require("../utils/admin.js");
 
 const scoreTable = require("../utils/scoreTable");
 

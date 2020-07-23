@@ -34,7 +34,7 @@ let db = {
           },
           notifications: {
             StVLDL2KK2if5UkJjwrh: {
-              type: "comment",
+              type: "comment", // status também
               author: "Rodrigada",
               authorId: "poqANHLzshOi4XTd4Wul",
               viewed: false,

@@ -12,6 +12,7 @@ const {
   login,
   getUsersList,
   changeUserArea,
+  changeUserRole,
 } = require("./handlers/users");
 const {
   getIdeas,
@@ -20,6 +21,8 @@ const {
   getLastIdeas,
   changeIdeaStatus,
 } = require("./handlers/ideas");
+const { createNotification } = require("./handlers/notifications");
+
 const { getAreas, createArea } = require("./handlers/companies");
 
 const { FBAuth } = require("./utils/fbAuth");
@@ -30,6 +33,7 @@ app.post("/signup", signup);
 app.post("/login", login);
 app.get("/userslist", FBAuth, getUsersList);
 app.post("/changeuserarea", FBAuthAdmin, changeUserArea);
+app.post("/changeUserRole", FBAuthAdmin, changeUserRole);
 
 // ideas routes
 app.get("/ideas", FBAuth, getIdeas);
@@ -41,5 +45,8 @@ app.post("/changeIdeaStatus/:ideaId", FBAuthAdmin, changeIdeaStatus);
 // companies routes
 app.get("/areas", FBAuth, getAreas);
 app.post("/newarea", FBAuthAdmin, createArea);
+
+// notifications routes
+app.post("/newnotification", FBAuth, createNotification);
 
 exports.api = functions.https.onRequest(app);
