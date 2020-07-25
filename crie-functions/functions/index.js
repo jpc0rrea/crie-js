@@ -21,7 +21,11 @@ const {
   getLastIdeas,
   changeIdeaStatus,
 } = require("./handlers/ideas");
-const { createNotification } = require("./handlers/notifications");
+const {
+  createNotification,
+  changeNotificationStatus,
+  getNotifications,
+} = require("./handlers/notifications");
 
 const { getAreas, createArea } = require("./handlers/companies");
 
@@ -48,5 +52,11 @@ app.post("/newarea", FBAuthAdmin, createArea);
 
 // notifications routes
 app.post("/newnotification", FBAuth, createNotification);
+app.post(
+  "/changenotificationstatus/:notificationId",
+  FBAuth,
+  changeNotificationStatus
+);
+app.get("/notifications", FBAuth, getNotifications);
 
 exports.api = functions.https.onRequest(app);
