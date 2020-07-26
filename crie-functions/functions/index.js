@@ -26,6 +26,7 @@ const {
   changeNotificationStatus,
   getNotifications,
 } = require("./handlers/notifications");
+const { createComment, editComment } = require("./handlers/comments");
 
 const { getAreas, createArea } = require("./handlers/companies");
 
@@ -58,5 +59,9 @@ app.post(
   changeNotificationStatus
 );
 app.get("/notifications", FBAuth, getNotifications);
+
+// comments routes
+app.post("/newcomment/:ideaId", FBAuth, createComment);
+app.post("/editcomment/:commentId", FBAuth, editComment);
 
 exports.api = functions.https.onRequest(app);

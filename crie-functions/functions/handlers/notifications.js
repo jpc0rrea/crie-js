@@ -6,6 +6,7 @@ exports.createNotification = (req, res) => {
   let type = req.body.type.trim();
   let actualState = "";
   let lastState = "";
+  const authorId = req.user.uid;
 
   if (type === "status") {
     actualState = req.body.actualState.trim();
@@ -15,7 +16,7 @@ exports.createNotification = (req, res) => {
   const notificationCredentials = {
     actualState,
     authorFullName: `${req.user.name} ${req.user.lastName}`,
-    authorId: req.user.uid,
+    authorId,
     createdAt: new Date().toISOString(),
     lastState,
     origin,
@@ -23,15 +24,22 @@ exports.createNotification = (req, res) => {
     type,
     viewed: false,
   };
-  db.collection("notifications")
-    .add(notificationCredentials)
-    .then((doc) => {
-      return res.json({ message: "Notificação criada com sucesso" });
-    })
-    .catch((err) => {
-      console.error(err);
-      return res.status(500).json({ error: err.code });
+
+  if (authorId !== ownerId) {
+    db.collection("notifications")
+      .add(notificationCredentials)
+      .then((doc) => {
+        return res.json({ message: "Notificação criada com sucesso" });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+      });
+  } else {
+    return res.json({
+      message: "Um usuário nao pode criar uma notificação para ele mesmo",
     });
+  }
 };
 
 exports.changeNotificationStatus = (req, res) => {
@@ -75,6 +83,7 @@ exports.getNotifications = (req, res) => {
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         let viewed = doc.data().viewed;
+        lijo;
 
         if (viewed === false) {
           notificationsNotViewed.push(doc.data());

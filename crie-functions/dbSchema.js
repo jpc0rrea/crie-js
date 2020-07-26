@@ -24,10 +24,11 @@ let db = {
               anonymous: false,
               comments: {
                 Mvrcz0kwl84f8IKy7k2k: {
-                  author: "Rodrigada",
+                  authorName: "Rodrigada",
                   authorId: "poqANHLzshOi4XTd4Wul",
                   body: "Muito legal a ideia!!! myboss",
                   createdAt: "2011-10-05T14:48:00.000Z",
+                  ideaId: "",
                 },
               },
             },
