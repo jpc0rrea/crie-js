@@ -26,9 +26,18 @@ const {
   changeNotificationStatus,
   getNotifications,
 } = require("./handlers/notifications");
-const { createComment, editComment } = require("./handlers/comments");
+const {
+  createComment,
+  editComment,
+  deleteComment,
+} = require("./handlers/comments");
 
-const { getAreas, createArea } = require("./handlers/companies");
+const {
+  getAreas,
+  createArea,
+  rankUsersByScore,
+  rankUsersByIdeas,
+} = require("./handlers/companies");
 
 const { FBAuth } = require("./utils/fbAuth");
 const { FBAuthAdmin } = require("./utils/fbAuthAdmin");
@@ -50,6 +59,8 @@ app.post("/changeIdeaStatus/:ideaId", FBAuthAdmin, changeIdeaStatus);
 // companies routes
 app.get("/areas", FBAuth, getAreas);
 app.post("/newarea", FBAuthAdmin, createArea);
+app.get("/rankusersbyscore", FBAuth, rankUsersByScore);
+app.get("/rankusersbyideas", FBAuth, rankUsersByIdeas);
 
 // notifications routes
 app.post("/newnotification", FBAuth, createNotification);
@@ -63,5 +74,6 @@ app.get("/notifications", FBAuth, getNotifications);
 // comments routes
 app.post("/newcomment/:ideaId", FBAuth, createComment);
 app.post("/editcomment/:commentId", FBAuth, editComment);
+app.delete("/deletecomment/:commentId", FBAuth, deleteComment);
 
 exports.api = functions.https.onRequest(app);

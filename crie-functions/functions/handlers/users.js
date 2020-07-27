@@ -64,6 +64,7 @@ exports.signup = (req, res) => {
                   lastName,
                   cpf,
                   score: 0,
+                  ideasQuantity: 0,
                   companyId,
                   companyName,
                   role: "",

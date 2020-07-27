@@ -47,11 +47,16 @@ exports.createIdea = (req, res) => {
       db.doc(`/users/${req.user.uid}`)
         .update({
           score: req.user.score + ideaCredentials.score,
+          ideasQuantity: req.user.ideasQuantity + 1,
         })
         .then(() => {
           return res
             .status(201)
             .json({ message: `Ideia com id ${docId} com sucesso` });
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
         });
     })
     .catch((err) => {

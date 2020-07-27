@@ -74,3 +74,33 @@ exports.editComment = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+exports.deleteComment = (req, res) => {
+  const userId = req.user.uid;
+  db.doc(`/comments/${req.params.commentId}`)
+    .get()
+    .then((documentSnapshot) => {
+      const authorId = documentSnapshot.data().authorId;
+      if (userId === authorId) {
+        db.doc(`/comments/${req.params.commentId}`)
+          .delete()
+          .then(() => {
+            return res.json({
+              message: "O comentário foi deletado com sucesso.",
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+          });
+      } else {
+        return res.json({
+          message: "Você não possui autorização para deletar o comentário.",
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};

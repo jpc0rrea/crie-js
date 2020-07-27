@@ -55,3 +55,43 @@ exports.createArea = (req, res) => {
       });
     });
 };
+
+exports.rankUsersByScore = (req, res) => {
+  let rankUsers = [];
+  let companyId = req.user.companyId;
+
+  db.collection("users")
+    .where("companyId", "==", companyId)
+    .orderBy("score", "desc")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        rankUsers.push(doc.data());
+      });
+      return res.json({ users: rankUsers });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+exports.rankUsersByIdeas = (req, res) => {
+  let rankUsersByIdeas = [];
+  let companyId = req.user.companyId;
+
+  db.collection("users")
+    .where("companyId", "==", companyId)
+    .orderBy("ideasQuantity", "desc")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        rankUsersByIdeas.push(doc.data());
+      });
+      return res.json({ users: rankUsersByIdeas });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};

@@ -29,6 +29,7 @@ const FBAuth = (req, res, next) => {
             req.user.name = doc.data().name;
             req.user.lastName = doc.data().lastName;
             req.user.score = doc.data().score;
+            req.user.ideasQuantity = doc.data().ideasQuantity;
           });
         })
         .then(() => {
