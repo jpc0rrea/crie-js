@@ -69,6 +69,7 @@ exports.signup = (req, res) => {
                   companyName,
                   role: "",
                   area: "",
+                  areaId: "",
                   id: userId,
                 };
                 // Cadastrar o usuário no nosso banco de dados
@@ -155,17 +156,59 @@ exports.changeUserArea = (req, res) => {
   let area = req.body.area.trim();
   let userId = req.body.userId.trim();
 
-  db.doc(`/users/${userId}`)
-    .update({
-      area,
-    })
-    .then(() => {
-      return res.json({ message: "Setor atualizado com sucesso." });
+  db.collection(`companies/${req.user.companyId}/areas/`)
+    .where("name", "==", area)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const oldAreaEmployesQuantity = doc.data().employesQuantity;
+
+        const userAreaId = doc.id;
+
+        db.doc(`users/${userId}`)
+          .get()
+          .then((documentSnapshot) => {
+            const area = documentSnapshot.data().area;
+            if (area !== "") {
+              db.doc(`companies/${req.user.companyId}/areas/${userId}`).update(
+                {}
+              );
+            }
+          });
+
+        db.doc(`companies/${req.user.companyId}/areas/${userAreaId}`)
+          .update({ employesQuantity: oldAreaEmployesQuantity + 1 })
+          .then(() => {
+            db.doc(`/users/${userId}`)
+              .update({
+                area,
+                areaId: userAreaId,
+              })
+              .then(() => {
+                return res.json({ message: "Setor atualizado com sucesso." });
+              })
+              .catch((err) => {
+                console.error(err);
+                return res.status(500).json({ error: err.code });
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+            return res.status(500).json({ error: err.code });
+          });
+      });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+};
+
+exports.changeUserArea = (req, res) => {
+  let area = req.body.area.trim();
+  let userId = req.body.userId.trim();
+
+  // TODO:
 };
 
 exports.changeUserRole = (req, res) => {

@@ -23,8 +23,8 @@ exports.createIdea = (req, res) => {
   // To Do: Mudar a quantidade de ideias do setor do usuário
   let name = req.body.name.trim();
   let description = req.body.description.trim();
-  let area = req.body.area.trim();
   let anonymous = req.body.anonymous;
+  let area = req.body.area.trim();
 
   const ideaCredentials = {
     name,
@@ -50,9 +50,28 @@ exports.createIdea = (req, res) => {
           ideasQuantity: req.user.ideasQuantity + 1,
         })
         .then(() => {
-          return res
-            .status(201)
-            .json({ message: `Ideia com id ${docId} com sucesso` });
+          db.collection(`companies/${req.user.companyId}/areas`)
+            .where("name", "==", area)
+            .get()
+            .then((querySnapshot) => {
+              const areaId = querySnapshot[0].id;
+              const oldIdeasQuantity = querySnapshot[0].data().ideasQuantity;
+              db.doc(`companies/${req.user.companyId}/areas/${areaId}`)
+                .update({ ideasQuantity: oldIdeasQuantity + 1 })
+                .then(() => {
+                  return res
+                    .status(201)
+                    .json({ message: `Ideia com id ${docId} com sucesso` });
+                })
+                .catch((err) => {
+                  console.error(err);
+                  return res.status(500).json({ error: err.code });
+                });
+            })
+            .catch((err) => {
+              console.error(err);
+              return res.status(500).json({ error: err.code });
+            });
         })
         .catch((err) => {
           console.error(err);
@@ -66,6 +85,7 @@ exports.createIdea = (req, res) => {
 };
 
 exports.getIdeaDetail = (req, res) => {
+  let commentList = [];
   db.doc(`/ideas/${req.params.ideaId}`)
     .get()
     .then((querySnapshot) => {
@@ -86,9 +106,23 @@ exports.getIdeaDetail = (req, res) => {
         ideaInformation.author = "Anônimo";
         ideaInformation.authorId = 0;
       }
-      return res.json({
-        ideaInformation,
-      });
+
+      db.collection("comments")
+        .where("ideaId", "==", req.params.ideaId)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((commentDoc) => {
+            commentList.push(commentDoc.data());
+          });
+          ideaInformation.comments = commentList;
+          return res.json({
+            ideaInformation,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        });
     })
     .catch((err) => {
       console.error(err);

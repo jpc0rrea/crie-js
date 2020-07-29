@@ -30,6 +30,9 @@ const FBAuthAdmin = (req, res, next) => {
             req.user.lastName = doc.data().lastName;
             req.user.score = doc.data().score;
             req.user.role = doc.data().role;
+            req.user.ideasQuantity = doc.data().ideasQuantity;
+            req.user.areaId = doc.data().areaId;
+            req.user.area = doc.data().area;
           });
           if (req.user.role !== "admin") {
             console.error("Permissão de administrador necessária.");

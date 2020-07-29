@@ -30,6 +30,8 @@ const FBAuth = (req, res, next) => {
             req.user.lastName = doc.data().lastName;
             req.user.score = doc.data().score;
             req.user.ideasQuantity = doc.data().ideasQuantity;
+            req.user.areaId = doc.data().areaId;
+            req.user.area = doc.data().area;
           });
         })
         .then(() => {

@@ -95,3 +95,37 @@ exports.rankUsersByIdeas = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+exports.deleteArea = (req, res) => {
+  db.doc(`companies/${req.user.companyId}/areas/${req.params.areaId}`)
+    .delete()
+    .then(() => {
+      db.collection("users")
+        .where("areaId", "==", req.params.areaId)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            db.doc(`users/${doc.id}`)
+              .update({
+                areaId: "",
+                area: "",
+              })
+              .catch((err) => {
+                console.error(err);
+                return res.status(500).json({ error: err.code });
+              });
+          });
+          return res.json({
+            message: ` O setor com Id ${req.params.areaId} foi excluído com sucesso`,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};

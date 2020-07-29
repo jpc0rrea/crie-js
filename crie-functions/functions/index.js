@@ -37,6 +37,7 @@ const {
   createArea,
   rankUsersByScore,
   rankUsersByIdeas,
+  deleteArea,
 } = require("./handlers/companies");
 
 const { FBAuth } = require("./utils/fbAuth");
@@ -61,6 +62,7 @@ app.get("/areas", FBAuth, getAreas);
 app.post("/newarea", FBAuthAdmin, createArea);
 app.get("/rankusersbyscore", FBAuth, rankUsersByScore);
 app.get("/rankusersbyideas", FBAuth, rankUsersByIdeas);
+app.delete("/deletearea/:areaId", FBAuthAdmin, deleteArea);
 
 // notifications routes
 app.post("/newnotification", FBAuth, createNotification);
