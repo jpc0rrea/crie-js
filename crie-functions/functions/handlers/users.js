@@ -156,59 +156,82 @@ exports.changeUserArea = (req, res) => {
   let area = req.body.area.trim();
   let userId = req.body.userId.trim();
 
-  db.collection(`companies/${req.user.companyId}/areas/`)
+  // Acessando o setor novo para pegar o Id e a qtdd de funcionários
+  db.collection(`companies/${req.user.companyId}/areas`)
     .where("name", "==", area)
     .get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const oldAreaEmployesQuantity = doc.data().employesQuantity;
-
-        const userAreaId = doc.id;
-
-        db.doc(`users/${userId}`)
-          .get()
-          .then((documentSnapshot) => {
-            const area = documentSnapshot.data().area;
-            if (area !== "") {
-              db.doc(`companies/${req.user.companyId}/areas/${userId}`).update(
-                {}
-              );
-            }
-          });
-
-        db.doc(`companies/${req.user.companyId}/areas/${userAreaId}`)
-          .update({ employesQuantity: oldAreaEmployesQuantity + 1 })
-          .then(() => {
-            db.doc(`/users/${userId}`)
-              .update({
-                area,
-                areaId: userAreaId,
-              })
-              .then(() => {
-                return res.json({ message: "Setor atualizado com sucesso." });
-              })
-              .catch((err) => {
-                console.error(err);
-                return res.status(500).json({ error: err.code });
-              });
-          })
-          .catch((err) => {
-            console.error(err);
-            return res.status(500).json({ error: err.code });
-          });
-      });
+      const oldEmployesQuantity = querySnapshot.docs[0].data().employesQuantity;
+      const newAreaId = querySnapshot.docs[0].id;
+      // Verificar se o usuário tem um setor já
+      db.doc(`users/${userId}`)
+        .get()
+        .then((documentSnapshot) => {
+          const oldArea = documentSnapshot.data().area;
+          const oldAreaId = documentSnapshot.data().areaId;
+          // Atualizar o setor e a area do setor do usuário
+          db.doc(`users/${userId}`)
+            .update({ area, areaId: newAreaId })
+            .then(() => {
+              // Aumentar a quantidade de usuários no novo setor
+              db.doc(`companies/${req.user.companyId}/areas/${newAreaId}`)
+                .update({ employesQuantity: oldEmployesQuantity + 1 })
+                .then(() => {
+                  // Se tiver setor antigo, diminuir a quantidade de usuários
+                  if (oldArea) {
+                    // Pegar o id e a quantidade antiga de usuários do setor antigo
+                    db.doc(`companies/${req.user.companyId}/areas/${oldAreaId}`)
+                      .get()
+                      .then((documentSnapshot) => {
+                        const oldAreaEmployesQuantity = documentSnapshot.data()
+                          .employesQuantity;
+                        // Diminuir a quantidade de usuários do setor antigo
+                        db.doc(
+                          `companies/${req.user.companyId}/areas/${oldAreaId}`
+                        )
+                          .update({
+                            employesQuantity: oldAreaEmployesQuantity - 1,
+                          })
+                          .then(() => {
+                            return res.json({
+                              message:
+                                "Setor do usuário atualizado com sucesso.",
+                            });
+                          })
+                          .catch((err) => {
+                            console.error(err);
+                            return res.status(500).json({ error: err.code });
+                          });
+                      })
+                      .catch((err) => {
+                        console.error(err);
+                        return res.status(500).json({ error: err.code });
+                      });
+                  } else {
+                    return res.json({
+                      message: "Setor do usuário atualizado com sucesso.",
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.error(err);
+                  return res.status(500).json({ error: err.code });
+                });
+            })
+            .catch((err) => {
+              console.error(err);
+              return res.status(500).json({ error: err.code });
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        });
     })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
-};
-
-exports.changeUserArea = (req, res) => {
-  let area = req.body.area.trim();
-  let userId = req.body.userId.trim();
-
-  // TODO:
 };
 
 exports.changeUserRole = (req, res) => {
