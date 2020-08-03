@@ -1,0 +1,47 @@
+:root {
+  font-size: 60%;
+
+  --color-background: #fff4f1;
+  --color-primary: #f4a261;
+  --color-primary-light: #f5b682;
+  --color-primary-lighter: #f3c49d;
+  --color-primary-dark: #f39549;
+  --color-primary-darker: #f18933;
+  --color-analisys: #e9c46a;
+  --color-analisys-dark: #e9ba43;
+  --color-implementation: #264653;
+  --color-implementation-dark: #1c4353;
+  --color-impleted: #2a9d8f;
+  --color-impleted-dark: #0fa08f;
+  --color-rejected: #e76f51;
+  --color-rejected-dark: #e75151;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100vh;
+}
+
+body {
+  background: var(--color-background);
+}
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body,
+input,
+button,
+textarea {
+  font: 500 1.6rem Ubuntu;
+}
