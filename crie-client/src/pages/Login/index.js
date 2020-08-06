@@ -2,6 +2,8 @@ import React from "react";
 
 import "./styles.css";
 
+const loginImg = require("../../assets/images/landing.svg");
+
 function Login() {
   return (
     <div id="page-login">
@@ -25,6 +27,9 @@ function Login() {
 
             <button type="submit">Entrar</button>
           </form>
+        </div>
+        <div id="right-side">
+          <img id="login-image" src={loginImg} alt="Inovação" />
         </div>
       </div>
     </div>
