@@ -1,35 +1,3 @@
-#page-login {
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#page-login-content {
-  width: 80%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 2rem;
-  border-radius: 0.6rem;
-  box-shadow: -0.1rem 0.3rem 0.5rem 0 rgba(0, 0, 0, 0.75);
-}
-
-#left-side {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-}
-
-#right-side {
-  display: none;
-}
-
 div.welcome-texts {
   display: flex;
   flex-direction: column;
@@ -86,20 +54,6 @@ div.welcome-texts {
   cursor: pointer;
 }
 
-.login-form .input-block input {
-  width: 100%;
-  height: 3.6rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--color-border);
-  outline: 0;
-  padding: 0 1.2rem;
-  font: 300 1.6rem Ubuntu;
-}
-
-.login-form .input-block + .input-block {
-  margin-top: 1.4rem;
-}
-
 .login-form a {
   color: var(--color-border);
 
@@ -113,23 +67,4 @@ div.welcome-texts {
 
 .login-form a:hover {
   color: var(--color-border-dark);
-}
-
-@media (min-width: 620px) {
-  #right-side {
-    display: inline;
-    overflow: hidden;
-  }
-
-  #page-login-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 75%;
-  }
-
-  #right-side img#login-image {
-    object-fit: contain;
-    width: 100%;
-    padding: 2rem;
-  }
 }

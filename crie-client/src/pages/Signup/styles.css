@@ -1,35 +1,3 @@
-#page-signUp {
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#page-signUp-content {
-  width: 80%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 2rem;
-  border-radius: 0.6rem;
-  box-shadow: -0.1rem 0.3rem 0.5rem 0 rgba(0, 0, 0, 0.75);
-}
-
-#left-side {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-}
-
-#right-side {
-  display: none;
-}
-
 div.create-texts {
   display: flex;
   flex-direction: column;
@@ -113,23 +81,4 @@ div.create-texts {
 
 .signUp-form a:hover {
   color: var(--color-border-dark);
-}
-
-@media (min-width: 620px) {
-  #right-side {
-    display: inline;
-    overflow: hidden;
-  }
-
-  #page-signUp-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 85%;
-  }
-
-  #right-side img#login-image {
-    object-fit: contain;
-    width: 100%;
-    padding: 2rem;
-  }
 }
