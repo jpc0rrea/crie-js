@@ -5,10 +5,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1rem
 }
 
 #page-login-content {
   width: 80%;
+  height: auto;
+  margin: 1rem 1rem;
   background: white;
   display: flex;
   align-items: center;
@@ -16,6 +19,8 @@
   padding-bottom: 2rem;
   border-radius: 0.6rem;
   box-shadow: -0.1rem 0.3rem 0.5rem 0 rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+  padding: 1rem
 }
 
 #left-side {
@@ -36,10 +41,15 @@
     overflow: hidden;
   }
 
+    #page-login {
+        margin-top: 1rem
+    }
+
   #page-login-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 75%;
+    height: auto;
+    margin-top: 1rem;
   }
 
   #right-side img#login-image {

@@ -18,7 +18,7 @@ div.create-texts {
   font-weight: 500;
   color: black;
 
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .create-texts p {
@@ -27,7 +27,7 @@ div.create-texts {
 
   margin-top: 1.2rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .signUp-form {
@@ -60,12 +60,12 @@ div.create-texts {
   border-radius: 0.6rem;
   border: 1px solid var(--color-border);
   outline: 0;
-  padding: 0 1.2rem;
+  padding: 0 0.8rem;
   font: 300 1.6rem Ubuntu;
 }
 
 .signUp-form div.input-block > * {
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
 }
 
 .signUp-form a {
