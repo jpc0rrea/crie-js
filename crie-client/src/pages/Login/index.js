@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 
 import Input from "../../components/Input";
 import InitialSkeleton from "../../components/InitialSkeleton";
+import api from "../../utils/api";
 
 import isEmail from "../../utils/isEmail";
 
@@ -15,6 +17,17 @@ function Login() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [inputState, setInputState] = useState("");
+
+  // const checkEmptyInput = (id, inputState) => {
+  //   if (!inputState) {
+  //     return "Esse campo não pode estar vazio";
+  //   } else {
+  //     console.log(checkEmptyInput);
+  //     return "";
+  //   }
+  // };
 
   const handleErrors = () => {
     const newErrors = {
@@ -62,9 +75,32 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const newErrors = handleErrors();
-    console.log(errors);
-    console.log(newErrors);
+
+    if (!newErrors.email && !newErrors.password) {
+      api
+        .post("login", {
+          email,
+          password,
+        })
+        .then((response) => {
+          setLoading(false);
+          console.log(response.data);
+          alert("Usuário logado com sucesso!");
+        })
+        .catch((err) => {
+          setLoading(false);
+          // Adicionar a classe error no email e na senha
+          // Possíveis erros:
+          // 1 - { error: "auth/too-many-requests" }
+          // 2 - { message: "Usuário não encontrado" }
+          // 3 - { message: "Senha incorreta" }
+          console.log(err.response.data);
+        });
+    } else {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,8 +140,18 @@ function Login() {
 
         <Link to="/forgotpassword">Esqueci minha senha</Link>
         <Link to="/signup">Criar conta</Link>
-
-        <button type="submit">Entrar</button>
+        <div className="buttonAndSpinner">
+          {loading && (
+            <Spinner
+              animation="border"
+              variant="outline-info"
+              role="status"
+              className="progressSpinner"
+              aria-hidden="true"
+            />
+          )}
+          <button type="submit">Entrar</button>
+        </div>
       </form>
     </InitialSkeleton>
   );
