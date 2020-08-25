@@ -18,7 +18,6 @@ function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [inputState, setInputState] = useState("");
 
   // const checkEmptyInput = (id, inputState) => {
   //   if (!inputState) {
