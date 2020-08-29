@@ -1,4 +1,4 @@
-div.welcome-texts {
+ddiv.welcome-texts {
   display: flex;
   flex-direction: column;
   width: 80%;
@@ -80,7 +80,6 @@ div.inputError p {
   font-size: 1.2rem;
 }
 
-
 div.buttonAndSpinner {
   display: flex;
   flex-direction: column;
@@ -91,4 +90,3 @@ div.buttonAndSpinner {
 .progressSpinner {
   margin-top: 1rem;
 }
-

@@ -5,8 +5,9 @@ import Spinner from "react-bootstrap/Spinner";
 import Input from "../../components/Input";
 import InitialSkeleton from "../../components/InitialSkeleton";
 import api from "../../utils/api";
-
+import handleErrors from "../../utils/handleErrors";
 import isEmail from "../../utils/isEmail";
+import isPassword from "../../utils/isPassword";
 
 import "./styles.css";
 
@@ -19,63 +20,17 @@ function Login() {
   });
   const [loading, setLoading] = useState(false);
 
-  // const checkEmptyInput = (id, inputState) => {
-  //   if (!inputState) {
-  //     return "Esse campo não pode estar vazio";
-  //   } else {
-  //     console.log(checkEmptyInput);
-  //     return "";
-  //   }
-  // };
-
-  const handleErrors = () => {
-    const newErrors = {
-      email: "",
-      password: "",
-    };
-
-    // Validações
-
-    // E-mail vazio
-    if (!email) {
-      newErrors.email = "Esse campo não pode estar vazio";
-    } else if (!isEmail(email)) {
-      // Validar se o email é válido
-      newErrors.email = "E-mail inválido";
-    }
-
-    // Senha vazia
-    if (!password) {
-      newErrors.password = "Esse campo não pode estar vazio";
-    } else if (password.length < 6) {
-      // Validar se a senha tem mais de 6 caracteres
-      newErrors.password = "A senha deve ser maior que 6 caracteres";
-    }
-
-    setErrors(newErrors);
-
-    const emailInputElement = document.getElementById("email");
-    const passwordInputElement = document.getElementById("password");
-
-    if (newErrors.email) {
-      emailInputElement.classList.add("error");
-    } else {
-      emailInputElement.classList.remove("error");
-    }
-
-    if (newErrors.password) {
-      passwordInputElement.classList.add("error");
-    } else {
-      passwordInputElement.classList.remove("error");
-    }
-
-    return newErrors;
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const newErrors = handleErrors();
+    const emailMessage = handleErrors("email", email, isEmail);
+    const passwordMessage = handleErrors("password", password, isPassword);
+    const newErrors = {
+      email: emailMessage,
+      password: passwordMessage,
+    };
+
+    setErrors(newErrors);
 
     if (!newErrors.email && !newErrors.password) {
       api
