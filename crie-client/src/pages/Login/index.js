@@ -5,7 +5,8 @@ import Spinner from "react-bootstrap/Spinner";
 import Input from "../../components/Input";
 import InitialSkeleton from "../../components/InitialSkeleton";
 import api from "../../utils/api";
-import handleErrors from "../../utils/handleErrors";
+import handleErrorsFrontEnd from "../../utils/handleErrorsFrontEnd";
+import handleErrorsBackEnd from "../../utils/handleErrorsBackEnd";
 import isEmail from "../../utils/isEmail";
 import isPassword from "../../utils/isPassword";
 
@@ -23,8 +24,12 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const emailMessage = handleErrors("email", email, isEmail);
-    const passwordMessage = handleErrors("password", password, isPassword);
+    const emailMessage = handleErrorsFrontEnd("email", email, isEmail);
+    const passwordMessage = handleErrorsFrontEnd(
+      "password",
+      password,
+      isPassword
+    );
     const newErrors = {
       email: emailMessage,
       password: passwordMessage,
@@ -45,12 +50,19 @@ function Login() {
         })
         .catch((err) => {
           setLoading(false);
-          // Adicionar a classe error no email e na senha
-          // Possíveis erros:
-          // 1 - { error: "auth/too-many-requests" }
-          // 2 - { message: "Usuário não encontrado" }
-          // 3 - { message: "Senha incorreta" }
-          console.log(err.response.data);
+          const errorMessage = err.response.data;
+          const newEmailMessage = handleErrorsBackEnd("email", errorMessage);
+          const newPasswordMessage = handleErrorsBackEnd(
+            "password",
+            errorMessage
+          );
+
+          const errorsFromBackEnd = {
+            email: newEmailMessage,
+            password: newPasswordMessage,
+          };
+
+          setErrors(errorsFromBackEnd);
         });
     } else {
       setLoading(false);
