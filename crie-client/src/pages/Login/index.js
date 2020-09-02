@@ -12,7 +12,7 @@ import isPassword from "../../utils/isPassword";
 
 import "./styles.css";
 
-function Login() {
+function Login({ history }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -45,8 +45,11 @@ function Login() {
         })
         .then((response) => {
           setLoading(false);
-          console.log(response.data);
-          alert("Usuário logado com sucesso!");
+          const token = response.data.token;
+          if (token) {
+            sessionStorage.setItem("token", token);
+            history.push("/");
+          }
         })
         .catch((err) => {
           setLoading(false);
