@@ -8,11 +8,11 @@
   font: 300 1.6rem Ubuntu;
 }
 
-.input-block input.error {
+div.input-block input.error {
   border: #cf6679 2px solid;
 }
 
-.input-block input.error::placeholder {
+div.input-block input.error::placeholder {
   color: #cf6679;
 }
 

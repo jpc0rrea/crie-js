@@ -82,3 +82,24 @@ div.create-texts {
 .signUp-form a:hover {
   color: var(--color-border-dark);
 }
+
+div.inputError {
+  color: #cf6679;
+}
+
+div.inputError p {
+  margin-bottom: 0.6rem;
+  margin-top: 0.2rem;
+  font-size: 1.2rem;
+}
+
+div.buttonAndSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progressSpinner {
+  margin-top: 1rem;
+}
