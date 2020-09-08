@@ -7,9 +7,9 @@ import Input from "../../components/Input";
 import handleErrorsFrontEnd from "../../utils/handleErrorsFrontEnd";
 import isEmail from "../../utils/isEmail";
 import isPassword from "../../utils/isPassword";
-import showInputError from "../../utils/showInputError";
 import isAccessCode from "../../utils/isAccessCode";
 import validateConfirmPassword from "../../utils/validateConfirmPassword";
+import cpfMask from "../../utils/cpfMask";
 
 import "./styles.css";
 
@@ -99,8 +99,9 @@ function Signup() {
           id="cpf"
           placeholder="CPF"
           onChange={(event) => {
-            setCpf(event.target.value);
+            setCpf(cpfMask(event.target.value));
           }}
+          value={cpf}
         />
         {errors.cpf && (
           <div className="inputError">
