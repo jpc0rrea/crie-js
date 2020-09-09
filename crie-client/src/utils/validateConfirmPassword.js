@@ -6,9 +6,9 @@ const validateConfirmPassword = (
   passwordMessage,
   confirmPasswordMessage
 ) => {
-  let newPasswordMessage = "";
-  let newConfirmPasswordMessage = "";
-  if (password != confirmPassword) {
+  let newPasswordMessage = passwordMessage;
+  let newConfirmPasswordMessage = confirmPasswordMessage;
+  if (password !== confirmPassword) {
     if (!passwordMessage) {
       newPasswordMessage = "Senha e confirmação de senha estão diferentes.";
       showInputError(newPasswordMessage, "password");

@@ -10,17 +10,20 @@ import isPassword from "../../utils/isPassword";
 import isAccessCode from "../../utils/isAccessCode";
 import validateConfirmPassword from "../../utils/validateConfirmPassword";
 import cpfMask from "../../utils/cpfMask";
+import checkErrors from "../../utils/checkErrors";
+import isCpf from "../../utils/isCpf";
+import api from "../../utils/api";
 
 import "./styles.css";
 
-function Signup() {
+function Signup({ history }) {
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [acessCode, setAcessCode] = useState("");
+  const [accessCode, setAccessCode] = useState("");
 
   const [errors, setErrors] = useState({
     email: "",
@@ -29,7 +32,7 @@ function Signup() {
     lastName: "",
     password: "",
     confirmPassword: "",
-    acessCode: "",
+    accessCode: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +40,7 @@ function Signup() {
     event.preventDefault();
     setLoading(true);
     let emailMessage = handleErrorsFrontEnd("email", email, isEmail);
-    let cpfMessage = handleErrorsFrontEnd("cpf", cpf);
+    let cpfMessage = handleErrorsFrontEnd("cpf", cpf, isCpf);
     let nameMessage = handleErrorsFrontEnd("name", name);
     let lastNameMessage = handleErrorsFrontEnd("lastName", lastName);
     let passwordMessage = handleErrorsFrontEnd(
@@ -49,9 +52,9 @@ function Signup() {
       "confirmPassword",
       confirmPassword
     );
-    let acessCodeMessage = handleErrorsFrontEnd(
-      "acessCode",
-      acessCode,
+    let accessCodeMessage = handleErrorsFrontEnd(
+      "accessCode",
+      accessCode,
       isAccessCode
     );
 
@@ -69,10 +72,34 @@ function Signup() {
       lastName: lastNameMessage,
       password: passwordMessage,
       confirmPassword: confirmPasswordMessage,
-      acessCode: acessCodeMessage,
+      accessCode: accessCodeMessage,
     };
 
     setErrors(newErrors);
+    if (checkErrors(newErrors)) {
+      api
+        .post("signup", {
+          email,
+          password,
+          confirmPassword,
+          cpf,
+          name,
+          lastName,
+          accessCode,
+        })
+        .then((response) => {
+          setLoading(false);
+          const token = response.data.token;
+          if (token) {
+            sessionStorage.setItem("token", token);
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+        });
+    }
   };
 
   return (
@@ -159,15 +186,15 @@ function Signup() {
           </div>
         )}
         <Input
-          id="acessCode"
+          id="accessCode"
           placeholder="Código de acesso"
           onChange={(event) => {
-            setAcessCode(event.target.value);
+            setAccessCode(event.target.value);
           }}
         />
-        {errors.acessCode && (
+        {errors.accessCode && (
           <div className="inputError">
-            <p>{errors.acessCode}</p>
+            <p>{errors.accessCode}</p>
           </div>
         )}
 
